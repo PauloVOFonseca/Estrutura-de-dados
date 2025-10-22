@@ -1,14 +1,14 @@
 #include <iostream>
 using namespace std;
 
-struct list
+struct list // O melhor nome pra isso seria node
 {
     int value;
     list *next;
     list(int v, list *n = nullptr) : value(v), next(n) {}
 };
 
-void addToList(int value, list *list);
+void addToList(int value, int *position, list *&list);
 void removeElementByValue(int value, list *&list);
 void removeElementByPosition(int value, list *&list);
 void printList(list *head);
@@ -17,36 +17,66 @@ int main()
 {
     list *head = new list(1);
 
-    addToList(21, head);
-    addToList(37, head);
-    addToList(7, head);
-    addToList(45, head);
-    addToList(2, head);
-    addToList(52, head);
-
+    addToList(21, nullptr, head);
+    addToList(37, nullptr, head);
+    addToList(7, nullptr, head);
+    addToList(45, nullptr, head);
+    addToList(2, nullptr, head);
+    addToList(52, nullptr, head);
     printList(head);
 
     removeElementByValue(2, head);
-
     printList(head);
 
     removeElementByPosition(1, head);
     printList(head);
-    removeElementByPosition(0, head);
 
+    removeElementByPosition(0, head);
+    printList(head);
+
+    int position = 0;
+
+    addToList(8299, &position, head);
+    printList(head);
+
+    position = 2;
+
+    addToList(499, &position, head);
     printList(head);
 
     return 0;
 }
 
-void addToList(int value, list *current)
+void addToList(int value, int *position, list *&head)
 {
-    while (current->next != nullptr)
+    if (position == nullptr)
     {
-        current = current->next;
+        list *cur = head;
+        while (cur->next != nullptr)
+        {
+            cur = cur->next;
+        }
+
+        cur->next = new list(value);
+        return;
     }
 
-    current->next = new list(value);
+    if (*position == 0)
+    {
+        list *newHead = new list(value, head);
+        head = newHead;
+        return;
+    }
+
+    int count = 0;
+    list *cur = head;
+    while (cur->next != nullptr && count != *position - 1)
+    {
+        cur = cur->next;
+        count++;
+    }
+
+    cur->next = new list(value, cur->next);
 }
 
 void removeElementByValue(int valueToRemove, list *&head)
