@@ -9,7 +9,7 @@ struct Node
 };
 
 void newNode(int value, Node *&head);
-void insertAtPosition(Node *&head, int value, int position);
+void reverseList(Node *&head);
 void printList(Node *head);
 
 int main()
@@ -21,11 +21,28 @@ int main()
     newNode(3, head);
     newNode(4, head);
     newNode(5, head);
-
-    insertAtPosition(head, 6, 0);
-    insertAtPosition(head, 7, 3);
-    insertAtPosition(head, 8, 10);
+    reverseList(head);
     printList(head);
+}
+
+void reverseList(Node *&head)
+{
+    if (!head || head->next == nullptr)
+        return;
+
+    Node *cur = head;
+    Node *temp = nullptr;
+
+    while (cur != nullptr)
+    {
+        temp = cur->prev;
+        cur->prev = cur->next;
+        cur->next = temp;
+        cur = cur->prev;
+    }
+
+    if (temp != nullptr)
+        head = temp->prev;
 }
 
 void newNode(int value, Node *&head)
@@ -43,36 +60,6 @@ void newNode(int value, Node *&head)
     }
 
     cur->next = new Node{value, cur, nullptr};
-}
-
-void insertAtPosition(Node *&head, int value, int position)
-{
-    if (!head)
-    {
-        head = new Node{value, nullptr, nullptr};
-        return;
-    }
-
-    if (position == 0)
-    {
-        Node *temp = head;
-        temp = new Node{value, nullptr, temp};
-        head = temp;
-        head->next->prev = head;
-        return;
-    }
-
-    Node *cur = head;
-    int count = 0;
-    while (cur->next != nullptr && count < position - 1)
-    {
-        cur = cur->next;
-        count++;
-    }
-    cur->next = new Node{value, cur, cur->next};
-
-    if (cur->next->next)
-        cur->next->next->prev = cur->next;
 }
 
 void printList(Node *head)
