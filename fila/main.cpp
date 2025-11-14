@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-// Exemplo de lista utilizando array padrão do C++
+// Exemplo de fila utilizando array padrão do C++
 
 struct Queue
 {
